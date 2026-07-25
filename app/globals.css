@@ -1,0 +1,50 @@
+@import "tailwindcss";
+
+:root {
+  --paper: #f2f4f3;
+  --paper-raised: #ffffff;
+  --ink-900: #12151c;
+  --ink-700: #2b3140;
+  --ink-400: #6b7280;
+  --ink-100: #dde1e6;
+  --signal-500: #e8a33d;
+  --signal-600: #c8842a;
+  --status-new: #e8a33d;
+  --status-contacted: #3b6ea5;
+  --status-closed: #2f6f5e;
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-paper-raised: var(--paper-raised);
+  --color-ink-900: var(--ink-900);
+  --color-ink-700: var(--ink-700);
+  --color-ink-400: var(--ink-400);
+  --color-ink-100: var(--ink-100);
+  --color-signal-500: var(--signal-500);
+  --color-signal-600: var(--signal-600);
+  --color-status-new: var(--status-new);
+  --color-status-contacted: var(--status-contacted);
+  --color-status-closed: var(--status-closed);
+  --font-display: var(--font-space-grotesk);
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-plex-mono);
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink-900);
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Rotated "stamp" affordance for the status chips — the one signature
+   element tying the public intake form to the admin ledger view. */
+.stamp {
+  transform: rotate(-1.5deg);
+}
+.stamp:nth-child(2) {
+  transform: rotate(1deg);
+}
+.stamp:nth-child(3) {
+  transform: rotate(-0.5deg);
+}
