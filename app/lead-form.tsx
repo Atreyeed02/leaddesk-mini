@@ -42,24 +42,29 @@ export function LeadForm() {
     setStatus("submitting");
 
     try {
+      console.log("[LeadForm] Submitting lead form data:", parsed.data);
       const res = await fetch("/api/leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(parsed.data),
       });
 
+      console.log("[LeadForm] Received response. Status:", res.status, "OK:", res.ok);
+
       if (!res.ok) {
         const body = await res.json().catch(() => null);
         throw new Error(body?.error ?? "Something went wrong");
       }
 
-      console.log("Before reset:", formRef.current);
+      console.log("[LeadForm] Submission succeeded. Resetting form reference...");
+      if (formRef.current) {
+        formRef.current.reset();
+      }
 
-// TEMPORARILY disable reset
-// formRef.current?.reset();
-
-setStatus("success");
+      console.log("[LeadForm] Updating status to success...");
+      setStatus("success");
     } catch (err) {
+      console.error("[LeadForm] Caught error during submit:", err);
       setStatus("error");
       setServerError(
         err instanceof Error ? err.message : "Could not submit. Try again."
