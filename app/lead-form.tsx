@@ -53,10 +53,12 @@ export function LeadForm() {
         throw new Error(body?.error ?? "Something went wrong");
       }
 
-      if (formRef.current) {
-        formRef.current.reset();
-      }
-      setStatus("success");
+      console.log("Before reset:", formRef.current);
+
+// TEMPORARILY disable reset
+// formRef.current?.reset();
+
+setStatus("success");
     } catch (err) {
       setStatus("error");
       setServerError(
