@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useState, useRef, type FormEvent } from "react";
 import { BUDGET_RANGES, leadSchema } from "@/lib/validation";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
 export function LeadForm() {
+  const formRef = useRef<HTMLFormElement>(null);
   const [status, setStatus] = useState<Status>("idle");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [serverError, setServerError] = useState<string | null>(null);
@@ -14,7 +15,8 @@ export function LeadForm() {
     event.preventDefault();
     setServerError(null);
 
-    const formData = new FormData(event.currentTarget);
+    const form = event.currentTarget;
+    const formData = new FormData(form);
     const raw = {
       name: String(formData.get("name") ?? ""),
       email: String(formData.get("email") ?? ""),
@@ -51,8 +53,10 @@ export function LeadForm() {
         throw new Error(body?.error ?? "Something went wrong");
       }
 
+      if (formRef.current) {
+        formRef.current.reset();
+      }
       setStatus("success");
-      event.currentTarget.reset();
     } catch (err) {
       setStatus("error");
       setServerError(
@@ -82,6 +86,7 @@ export function LeadForm() {
 
   return (
     <form
+      ref={formRef}
       onSubmit={handleSubmit}
       noValidate
       className="rounded-lg border border-ink-100 bg-paper-raised p-6 sm:p-8 shadow-sm"
