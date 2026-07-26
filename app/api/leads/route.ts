@@ -25,24 +25,34 @@ export async function POST(request: Request) {
 
   const supabase = await createClient();
 
-  const { data, error } = await supabase
+  const { error } = await supabase
     .from("leads")
     .insert({
       name: parsed.data.name,
       email: parsed.data.email,
       budget_range: parsed.data.budgetRange,
       message: parsed.data.message,
-    })
-    .select("id")
-    .single();
+    });
 
   if (error) {
-    console.error("Failed to insert lead:", error.message);
-    return NextResponse.json(
-      { error: "Could not save your submission. Please try again." },
-      { status: 500 }
-    );
-  }
+  console.error("=== SUPABASE ERROR START ===");
+  console.error(error);
+  console.error(JSON.stringify(error, null, 2));
+  console.error("=== SUPABASE ERROR END ===");
 
-  return NextResponse.json({ id: data.id }, { status: 201 });
+  return NextResponse.json(
+    {
+      error: "Could not save your submission. Please try again.",
+      supabase: {
+        message: error.message,
+        code: error.code,
+        details: error.details,
+        hint: error.hint,
+      },
+    },
+    { status: 500 }
+  );
+}
+
+  return NextResponse.json({ success: true }, { status: 201 });
 }
